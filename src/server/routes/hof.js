@@ -12,6 +12,10 @@ exports.list = function(req, res, next) {
     search.year = parseInt(req.params.year);
   }
 
+  if (req.params.game) {
+    search.game = req.params.game;
+  }
+
   // @TODO: if month or year provided use .findOne()
   $db.get('hof').find(search, function(err, data) {
     res.send(data);

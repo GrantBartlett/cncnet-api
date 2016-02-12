@@ -1,5 +1,5 @@
 var debug = require('debug')('wol:leaderboard'),
-    $db = require('../lib/mongo');
+$db = require('../lib/mongo');
 
 exports.list = function(req, res, next) {
   var search = {};
@@ -12,12 +12,18 @@ exports.list = function(req, res, next) {
     search.year = parseInt(req.params.year);
   }
 
-  if (req.params.game) {
-    search.game = req.params.game;
-  }
-
   // @TODO: if month or year provided use .findOne()
   $db.get('hof').find(search, function(err, data) {
-    res.send(data);
+    if(req.params.game){
+      d = {};
+
+      data.forEach(function(value, key){
+        d.result = value[req.params.game];
+      });
+
+      res.send(d);
+    }else{
+      res.send(data);
+    }
   });
 };
